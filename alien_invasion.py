@@ -43,7 +43,6 @@ class AlienInvasion:
                 elif event.key == pygame.K_LEFT:
                     self.ship.moving_left = False
 
-
     def _update_screen(self):
         self.screen.fill(self.settings.bg_color)
         self.ship.blitme()
@@ -52,6 +51,6 @@ class AlienInvasion:
 
 
 if __name__ == '__main__':
-    #here we run the game
+    """here we run the game"""
     ai = AlienInvasion()
     ai.run_game()
