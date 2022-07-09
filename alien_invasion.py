@@ -76,6 +76,8 @@ class AlienInvasion:
             self._create_fleet()
             self.ship.center_ship()
 
+            pygame.mouse.set_visible(False)
+
     def _check_keydown_events(self, event):
         if event.key == pygame.K_RIGHT:
             self.ship.moving_right = True
@@ -169,6 +171,7 @@ class AlienInvasion:
             sleep(0.5)
         else:
             self.stats.game_active = False
+            pygame.mouse.set_visible(True)
 
     def _update_aliens(self):
         self._check_fleet_edges()
