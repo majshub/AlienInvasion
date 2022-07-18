@@ -1,5 +1,6 @@
 import pygame.font
 
+
 class Scoreboard:
     def __init__(self, ai_game):
         self.screen = ai_game.screen
@@ -22,4 +23,3 @@ class Scoreboard:
 
     def show_score(self):
         self.screen.blit(self.score_image, self.score_rect)
-
