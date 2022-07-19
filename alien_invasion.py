@@ -205,6 +205,7 @@ class AlienInvasion:
     def _ship_hit(self):
 
         if self.stats.ships_left > 0:
+            mixer.music.stop()
             self.stats.ships_left -= 1
             self.sb.prep_ships()
 
@@ -214,9 +215,15 @@ class AlienInvasion:
             self._create_fleet()
             self.ship.center_ship()
 
+            fail_sound = mixer.Sound('sounds/failing.wav')
+            fail_sound.play()
+
             sleep(0.5)
+            mixer.music.play()
         else:
             mixer.music.stop()
+            fail_sound = mixer.Sound('sounds/failing.wav')
+            fail_sound.play()
             self.stats.game_active = False
             # pygame.mouse.set_visible(True)
 
