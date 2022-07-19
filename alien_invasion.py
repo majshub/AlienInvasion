@@ -12,6 +12,8 @@ from scoreboard import Scoreboard
 
 from button import Button
 
+from mute_button import MuteButton
+
 from ship import Ship
 
 from bullet import Bullet
@@ -45,6 +47,8 @@ class AlienInvasion:
 
         self.play_button = Button(self, "Play")
 
+        self.mute_button = MuteButton(self)
+
     def run_game(self):
         """starts the main loop for the game."""
 
@@ -64,20 +68,24 @@ class AlienInvasion:
                 sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
-                self._check_play_button(mouse_pos)
+                self._check_clicked_button(mouse_pos)
             elif event.type == pygame.KEYDOWN:
                 self._check_keydown_events(event)
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
 
-    def _check_play_button(self, mouse_pos):
+    def _check_clicked_button(self, mouse_pos):
         button_clicked = self.play_button.rect.collidepoint(mouse_pos)
+        mute_button_clicked = self.mute_button.rect.collidepoint(mouse_pos)
         if button_clicked and not self.stats.game_active:
             self._start_game()
+        elif mute_button_clicked:
+            self.settings.is_mute *= -1
 
     def _start_game(self):
-        mixer.music.load('sounds/background.wav')
-        mixer.music.play(-1)
+        if ai.settings.is_mute < 0:
+            mixer.music.load('sounds/background.wav')
+            mixer.music.play(-1)
         self.settings.initialize_dynamic_settings()
         self.stats.reset_stats()
         self.stats.game_active = True
@@ -91,7 +99,7 @@ class AlienInvasion:
         self._create_fleet()
         self.ship.center_ship()
 
-        pygame.mouse.set_visible(False)
+        # pygame.mouse.set_visible(False)
 
     def _check_keydown_events(self, event):
         if event.key == pygame.K_RIGHT:
@@ -116,8 +124,13 @@ class AlienInvasion:
         if len(self.bullets) < self.settings.bullets_allowed:
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
-            bullet_sound = mixer.Sound('sounds/laser.wav')
-            bullet_sound.play()
+            if self.settings.is_mute < 0:
+                bullet_sound = mixer.Sound('sounds/laser.wav')
+                bullet_sound.play()
+                mixer.music.load('sounds/background.wav')
+                mixer.music.play(-1)
+            else:
+                mixer.music.stop()
 
     def _create_fleet(self):
         alien = Alien(self)
@@ -166,8 +179,9 @@ class AlienInvasion:
 
         if collisions:
             for aliens in collisions.values():
-                explosion_sound = mixer.Sound('sounds/explosion.wav')
-                explosion_sound.play()
+                if self.settings.is_mute < 0:
+                    explosion_sound = mixer.Sound('sounds/explosion.wav')
+                    explosion_sound.play()
                 self.stats.score += self.settings.alien_points
             self.sb.prep_score()
             self.sb.check_high_score()
@@ -204,7 +218,7 @@ class AlienInvasion:
         else:
             mixer.music.stop()
             self.stats.game_active = False
-            pygame.mouse.set_visible(True)
+            # pygame.mouse.set_visible(True)
 
     def _update_aliens(self):
         self._check_fleet_edges()
@@ -229,6 +243,8 @@ class AlienInvasion:
         if not self.stats.game_active:
             self.play_button.draw_button()
 
+        self.mute_button.mute_blit()
+
         pygame.display.flip()
 
 
@@ -236,3 +252,4 @@ if __name__ == '__main__':
     """here we run the game"""
     ai = AlienInvasion()
     ai.run_game()
+

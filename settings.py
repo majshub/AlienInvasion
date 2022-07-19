@@ -21,6 +21,8 @@ class Settings:
         self.speedup_scale = 1.1
         self.score_scale = 1.5
 
+        self.is_mute = -1
+
         self.initialize_dynamic_settings()
 
 
@@ -34,6 +36,7 @@ class Settings:
 
         # scoring
         self.alien_points = 50
+
 
     def increase_speed(self):
         self.ship_speed *= self.speedup_scale
