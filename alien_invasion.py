@@ -18,6 +18,8 @@ from bullet import Bullet
 
 from alien import Alien
 
+from pygame import mixer
+
 
 class AlienInvasion:
     """Overall class to manage game assets and behavior."""
@@ -74,6 +76,8 @@ class AlienInvasion:
             self._start_game()
 
     def _start_game(self):
+        mixer.music.load('sounds/background.wav')
+        mixer.music.play(-1)
         self.settings.initialize_dynamic_settings()
         self.stats.reset_stats()
         self.stats.game_active = True
@@ -112,6 +116,8 @@ class AlienInvasion:
         if len(self.bullets) < self.settings.bullets_allowed:
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
+            bullet_sound = mixer.Sound('sounds/laser.wav')
+            bullet_sound.play()
 
     def _create_fleet(self):
         alien = Alien(self)
@@ -160,6 +166,8 @@ class AlienInvasion:
 
         if collisions:
             for aliens in collisions.values():
+                explosion_sound = mixer.Sound('sounds/explosion.wav')
+                explosion_sound.play()
                 self.stats.score += self.settings.alien_points
             self.sb.prep_score()
             self.sb.check_high_score()
@@ -194,6 +202,7 @@ class AlienInvasion:
 
             sleep(0.5)
         else:
+            mixer.music.stop()
             self.stats.game_active = False
             pygame.mouse.set_visible(True)
 
