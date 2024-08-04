@@ -58,9 +58,6 @@ python alien_invasion.py
 
 Contributions are welcome! Please fork the repository and create a pull request with your changes.
 
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 ```
 
 Feel free to adjust any details as necessary.
