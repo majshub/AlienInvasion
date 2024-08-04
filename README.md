@@ -1,4 +1,3 @@
-```markdown
 # Alien Invasion
 
 Alien Invasion is a 2D space shooter game where the player controls a spaceship to defend against waves of alien invaders. The game is built using Python and the Pygame library.
